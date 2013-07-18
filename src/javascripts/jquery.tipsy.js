@@ -1,7 +1,9 @@
 // tipsy, facebook style tooltips for jquery
-// version 1.0.0a
+// version 1.0.0b
 // (c) 2008-2010 jason frame [jason@onehackoranother.com]
 // released under the MIT license
+
+// modified by patrick h. lauke [redux@splintered.co.uk] for increased keyboard and assistive technology accessibility July 2013
 
 (function($) {
 
@@ -124,9 +126,19 @@
         },
 
         fixTitle: function() {
-            var $e = this.$element;
+            var $e = this.$element,
+                id = maybeCall(this.options.id, this.$element[0]);
             if ($e.prop('title') || typeof($e.prop('original-title')) != 'string') {
                 $e.prop('original-title', $e.prop('title') || '').removeAttr('title');
+                // add aria-describedby pointing to the tooltip's id
+                $e.attr('aria-describedby', id);
+                // if it doesn't already have a tabindex, force the trigger element into the tab cycle
+                // to make it keyboard accessible with tabindex=0. this automatically makes elements
+                // that are not normally keyboard accessible (div or span) that have been tipsy-fied
+                // also operable with the keyboard.
+                if ($e.attr('tabindex') === undefined) {
+                    $e.attr('tabindex', 0);
+                }
             }
         },
 
@@ -143,8 +155,12 @@
         },
 
         tip: function() {
+            var id = maybeCall(this.options.id, this.$element[0]);
+
             if (!this.$tip) {
-                this.$tip = $('<div class="tipsy' + this.options.theme + '"></div>').html('<div class="tipsy-arrow' + this.options.theme + '"></div><div class="tipsy-inner' + this.options.theme + '"></div>').attr("role","tooltip");
+                // generate tooltip, with appropriate ARIA role and an 'id' (can be set in options),
+                // so it can be targetted by aria-describedby in the trigger element
+                this.$tip = $('<div class="tipsy' + this.options.theme + '" id="'+id+'" role="tooltip"></div>').html('<div class="tipsy-arrow' + this.options.theme + '"></div><div class="tipsy-inner' + this.options.theme + '"></div>').attr("role","tooltip");
                 this.$tip.data('tipsy-pointee', this.$element[0]);
             }
             return this.$tip;
@@ -220,19 +236,32 @@
         if (!options.live) this.each(function() { get(this); });
 
         if (options.trigger != 'manual') {
-            var eventIn  = options.trigger == 'hover' ? 'mouseenter mouseover' : 'focus',
-                eventOut = options.trigger == 'hover' ? 'mouseleave mouseout' : 'blur';
+            // one of the biggest changes from 1.0.0a: by default, bind to BOTH mouseenter/mouseleave AND focus/blur
+            // this ensures out-of-the-box keyboard accessibility, showing tooltips when users TAB to a (focusable) element
+            // sites that still use 'hover' will also get this new interactive behavior automatically, only those who
+            // explicitly set 'focus' will only get focus/blur (for forms, for instance)
 
             if (options.live && options.live !== true) {
-                $(this).on(eventIn, options.live, enter);
-                $(this).on(eventOut, options.live, leave);
+                if (options.trigger != 'focus') {
+                    $(this).on('mouseenter', options.live, enter);
+                    $(this).on('mouseleave', options.live, leave);
+                }
+                if (options.trigger != 'blur') {
+                    $(this).on('focus', options.live, enter);
+                    $(this).on('blur', options.live, leave);
+                }
             } else {
                 if (options.live && !$.live) {
                     //live === true and using jQuery >= 1.9
                     throw "Since jQuery 1.9, pass selector as live argument. eg. $(document).tipsy({live: 'a.live'});";
                 }
                 var binder = options.live ? 'live' : 'bind';
-                this[binder](eventIn, enter)[binder](eventOut, leave);
+                if (options.trigger != 'focus') {
+                    this[binder]('mouseenter', enter)[binder]('mouseleave', leave);
+                }
+                if (options.trigger != 'blur') {
+                    this[binder]('focus', enter)[binder]('blur', leave);
+                }
             }
         }
 
@@ -243,6 +272,7 @@
     $.fn.tipsy.defaults = {
         aria: false,
         className: null,
+        id: 'tipsy',
         delayIn: 0,
         delayOut: 0,
         fade: false,
@@ -257,7 +287,7 @@
         offset: 0,
         opacity: 0.8,
         title: 'title',
-        trigger: 'hover',
+        trigger: 'interactive',
         theme: ''
     };
 
@@ -306,7 +336,10 @@
      * yields a closure of the supplied parameters, producing a function that takes
      * no arguments and is suitable for use as an autogravity function like so:
      *
-     * @param margin (int) - distance from the viewable region edge that an
+     * @param marginNorth (int) - distance from the viewable region top edge that an
+     *        element should be before setting its tooltip's gravity to be away
+     *        from that edge.
+     * @param marginEast (int) - distance from the viewable region right edge that an
      *        element should be before setting its tooltip's gravity to be away
      *        from that edge.
      * @param prefer (string, e.g. 'n', 'sw', 'w') - the direction to prefer
