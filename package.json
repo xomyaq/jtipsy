@@ -11,6 +11,17 @@
     "dependencies": {
         "jquery": "*"
     },
+    "devDependencies": {
+        "uglify-js": "*"
+    },
+    "script": {
+        "prepublish": "uglifyjs src/jquery.tipsy.js -o dist/jquery.tipsy.min.js"
+    },
+    "maintainers": [{
+            "name": "Martin Martimeo",
+            "email": "martin@martimeo.de",
+            "web": "https://github.com/MartinMartimeo/tipsy"
+    }],
     "keywords": [
         "jquery",
         "tipsy",
@@ -20,6 +31,14 @@
         "src/jquery.tipsy.js",
         "src/jquery.tipsy.css"
     ],
+    "npmName": "jquery.tipsy",
+    "npmFileMap": [{
+        "basePath": "/src/",
+        "files": [
+            "*.js",
+            "*.css"
+        ]
+    }],
     "licencse": "MIT"
 
 }
