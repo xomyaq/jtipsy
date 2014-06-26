@@ -1,0 +1,25 @@
+{
+    "name": "jquery.tipsy",
+    "version": "1.0.2",
+    "description": "Facebook-style tooltip plugin for jQuery",
+    "author": "Jason Frame <jason@onehackoranother.com>",
+    "main": "src/jquery.tipsy.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jaz303/tipsy"
+    },
+    "dependencies": {
+        "jquery": "*"
+    },
+    "keywords": [
+        "jquery",
+        "tipsy",
+        "facebook"
+    ],
+    "files": [
+        "src/jquery.tipsy.js",
+        "src/jquery.tipsy.css"
+    ],
+    "licencse": "MIT"
+
+}

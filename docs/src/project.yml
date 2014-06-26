@@ -8,5 +8,5 @@ project:
         - ["Summary of Configuration Options", "#options"]
         - ["Notes", "#notes"]
         - ["Download", "#download"]
-    stylesheets: ['stylesheets/tipsy.css', 'tipsy-docs.css']
-    javascripts: ['javascripts/jquery.tipsy.js']
+    stylesheets: ['jquery.tipsy.css', 'jquery.tipsy-docs.css']
+    javascripts: ['jquery.tipsy.js']
