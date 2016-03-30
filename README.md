@@ -6,6 +6,8 @@ Facebook-style tooltip plugin for jQuery
 
 Released under The MIT License.
 
+This is fork maintained by [@MartinMartimeo](https://github.com/MartinMartimeo), because former repository [is stale](https://github.com/cdnjs/cdnjs/pull/3467)
+
 ## Description:
 
 tipsy is a simple jQuery plugin for generating Facebook-style tooltips.
