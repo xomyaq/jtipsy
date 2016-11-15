@@ -1,4 +1,4 @@
-# tipsy
+# jtipsy
 
 Facebook-style tooltip plugin for jQuery
 
@@ -6,27 +6,17 @@ Facebook-style tooltip plugin for jQuery
 
 Released under The MIT License.
 
-This is fork maintained by [@MartinMartimeo](https://github.com/MartinMartimeo), because former repository [is stale](https://github.com/cdnjs/cdnjs/pull/3467)
+This is fork maintained by [@xomyaq](https://github.com/xomyaq), because former repository [is stale](https://github.com/cdnjs/cdnjs/pull/3467)
 
 ## Description:
 
-tipsy is a simple jQuery plugin for generating Facebook-style tooltips.
+jtipsy is a simple jQuery plugin for generating Facebook-style tooltips.
 
 It's used by Twitter, Github, Slideshare and Bitbucket, amongst others.
 
 ## Homepage:
 
 http://onehackoranother.com/projects/jquery/tipsy
-
-## Source:
-
-Hosted at GitHub; browse at:
-
-  http://github.com/jaz303/tipsy/tree/master
-
-Or clone from:
-
-    git://github.com/jaz303/tipsy.git
 
 ## Usage:
 
